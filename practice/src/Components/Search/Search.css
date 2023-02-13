@@ -1,0 +1,53 @@
+h1 {
+    text-align: center;
+    margin-top: 300px;
+}
+
+.input {
+    width: 800px;
+    height: 40px;
+    margin-left: 500px;
+    margin-top: 70px;
+    border-radius: 30px;
+    text-align: center;
+    color: black;
+    font-size: large;
+    font-family: sans-serif;
+
+}
+
+h2{
+    text-align: center;
+    margin-top: 30px;
+
+}
+.button {
+    margin-top: 50px;
+    margin-left: 750px;
+    width: 300px;
+    border-radius: 30px;
+    height: 35px;
+    background-color: black;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
+
+}
+
+
+.card{
+    width: 40rem;
+    margin-top: 20px;
+    margin-left:550px;
+}
+
+.edit-button {
+    color: rgb(0, 120, 0);
+    margin-left: 20px;
+    border-radius: 20px;
+    font-weight: 400;
+
+}
+
