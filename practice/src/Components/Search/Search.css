@@ -21,6 +21,13 @@ h2{
     margin-top: 30px;
 
 }
+
+h3{
+    text-align: center;
+    font-size: medium;
+    margin-right: 50px;
+
+}
 .button {
     margin-top: 50px;
     margin-left: 750px;
@@ -51,3 +58,16 @@ h2{
 
 }
 
+
+.dropdown{
+    width: 800px;
+    height: 40px;
+    margin-left: 500px;
+    margin-top: 70px;
+    border-radius: 90px;
+    text-align: center;
+    color: black;
+    font-size: large;
+    font-family: sans-serif;
+
+}
