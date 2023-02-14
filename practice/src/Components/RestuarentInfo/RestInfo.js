@@ -37,6 +37,7 @@ function RestInfo() {
 
 
         <ul>
+            <h4>{restuarent.name}</h4>
 
           
 
@@ -45,7 +46,6 @@ function RestInfo() {
                         <div className="card" >
                             <img src={restuarent.image_link} className="card-img-top" ></img>
                             <div className="card-body">
-                                <h5 className="card-title">{restuarent.name}</h5>
                                 <p className="card-text"> <a>Short Description:</a> {restuarent.short_description}</p>
                                 <p className="card-text"> <a>Long Description:</a> {restuarent.long_description}</p>
                                 <p className="card-text"> <a>Location:</a> {restuarent.location}</p>
