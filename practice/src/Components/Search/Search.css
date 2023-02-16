@@ -1,6 +1,6 @@
 h1 {
     text-align: center;
-    margin-top: 300px;
+    margin-top: 30px;
 }
 
 .input {
@@ -70,4 +70,11 @@ h3{
     font-size: large;
     font-family: sans-serif;
 
+}
+
+.image{
+    border-radius: 50%;
+    margin-left: 800px;
+    height: 200px;
+    width: 200px;
 }

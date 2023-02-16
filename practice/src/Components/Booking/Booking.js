@@ -82,7 +82,7 @@ return (
 
             <h5>Enter Your Details</h5>
             <div className="inputfield">
-                <input className="myinput" type="text" name="name" id="name" placeholder='name' required value={name} onChange={(e) => setName(e.target.value)} ></input>
+                <input className="myinput" type="text" name="name" id="name" placeholder='Name' required value={name} onChange={(e) => setName(e.target.value)} ></input>
             </div>
             <div className="inputfield">
                 <input className="myinput" type="text" name="address" id="address" placeholder='Address' required  value={address} onChange={(e) => setAddress(e.target.value)} ></input>

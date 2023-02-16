@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './Search.css'
 import axios from 'axios';
 import 'react-dropdown/style.css';
@@ -11,7 +11,16 @@ function Search() {
     const [pool, setPool] = useState("");
     const [experience, setExperience] = useState("");
     const [allorigins, setAllOrigins] = useState([]);
+    const [message,setMessage] = useState("What are you waiting for? Search it!");
+ 
 
+
+    useEffect(() => {
+        const storedRestuarents = localStorage.getItem("restuarents");
+        if (storedRestuarents) {
+            setAllOrigins(JSON.parse(storedRestuarents));
+        }
+      }, []);
 
     function GetRestuarent(e) {
         const body = {
@@ -27,8 +36,14 @@ function Search() {
             (response => {
 
                 setAllOrigins(response.data)
+                localStorage.setItem("restuarents",  JSON.stringify(response.data));
+                if (!response.data.length){
+                    setMessage("Oops! No Hotels found. Try again with another search.")
+                }
 
             })
+
+
 
 
     }
@@ -41,8 +56,10 @@ function Search() {
 
 
         <div>
+            <img className='image' src="https://raw.githubusercontent.com/jeff-lent/Alisnobba/main/Capstone/Logo.png" ></img>
 
-            <h1>Search your Desired Restuarent</h1>
+
+            <h1>Book Your Dream Hotel</h1>
 
 
             <form action="" onSubmit={GetRestuarent}>
@@ -52,7 +69,7 @@ function Search() {
                 </div>
 
 
-                <select className='dropdown' value={experience} onChange={(e) => setExperience(e.target.value)}>
+                <select required className='dropdown' value={experience} onChange={(e) => setExperience(e.target.value)}>
                     <option value="" disabled selected hidden>Select Experience</option>
                     <option value="Luxury">Luxury</option>
                     <option value="Budget">Budget</option>
@@ -60,7 +77,7 @@ function Search() {
                 </select>
 
 
-                <select className='dropdown' value={pool} onChange={(e) => setPool(e.target.value)}>
+                <select required className='dropdown' value={pool} onChange={(e) => setPool(e.target.value)}>
                     <option value="" disabled selected hidden>Need Pool?</option>
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
@@ -76,10 +93,7 @@ function Search() {
 
             </form>
 
-            {allorigins.length ?
-
-
-
+            {allorigins.length?
                 <ul>
 
                     {allorigins.map((i) =>
@@ -107,7 +121,7 @@ function Search() {
                 </ul>
 
                 :
-                <h2> Oops! No Hotels Found.</h2>
+                <h2> {message}</h2>
             }
         </div>
 
