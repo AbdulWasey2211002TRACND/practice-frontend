@@ -37,34 +37,39 @@ function RestInfo() {
 
 
         <ul>
-            <h4>{restuarent.name}</h4>
+            <h4 style={{color:"burlywood"}}>{restuarent.name}</h4>
 
-          
+            <Link to="/">
+                <button style={{color:"white"}} className="btn btn-info" type="button">
+                    Return to Results
+                </button>
+            </Link>
 
-                <ul>
-                    <li key={restuarent.id}>
-                        <div className="card" >
-                            <img src={restuarent.image_link} className="card-img-top" ></img>
-                            <div className="card-body">
-                                <p className="card-text"> <a>Short Description:</a> {restuarent.short_description}</p>
-                                <p className="card-text"> <a>Long Description:</a> {restuarent.long_description}</p>
-                                <p className="card-text"> <a>Location:</a> {restuarent.location}</p>
-                                <p className="card-text"> <a>Experience:</a> {restuarent.experience}</p>
-                                <p className="card-text"> <a>Pool Availabilty:</a> {restuarent.pool}</p>
-                                <p className="card-text"> <a>Price: $</a>{restuarent.price}</p>
-                                <Link to="/Restuarent" state={{ id: restuarent.id }}>
-                                    <button className="btn btn-success" type="button">
-                                        Book
-                                    </button>
-                                </Link>
-                            </div>
+            <ul>
+                <li key={restuarent.id}>
+
+                    <div className="card" >
+                        <img src={restuarent.image_link} className="card-img-top" ></img>
+                        <div className="card-body">
+                            <p className="card-text"> <a>Short Description:</a> {restuarent.short_description}</p>
+                            <p className="card-text"> <a>Long Description:</a> {restuarent.long_description}</p>
+                            <p className="card-text"> <a>Location:</a> {restuarent.location}</p>
+                            <p className="card-text"> <a>Experience:</a> {restuarent.experience}</p>
+                            <p className="card-text"> <a>Pool Availabilty:</a> {restuarent.pool}</p>
+                            <p className="card-text"> <a>Price: $</a>{restuarent.price}</p>
+                            <Link to="/Booking" state={{ restuarent: restuarent }}>
+                                <button className="btn btn-success" type="button">
+                                    Book
+                                </button>
+                            </Link>
                         </div>
-                    </li>
-                </ul>
+                    </div>
+                </li>
+            </ul>
 
-            
 
-            
+
+
 
         </ul>
 

@@ -89,7 +89,7 @@ function Search() {
                             <div className="card" >
                                 <img src={i.image_link} className="card-img-top" ></img>
                                 <div className="card-body">
-                                    <h5 className="card-title">{i.name}</h5>
+                                    <h5 style={{color:"burlywood"}} className="card-title">{i.name}</h5>
                                     <p className="card-text">{i.short_description}</p>
                                     <Link to="/Restuarent" state={{ id: i.id }}>
                                         <button  className="btn btn-success" type="button"> 
