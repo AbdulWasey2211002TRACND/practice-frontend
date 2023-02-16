@@ -13,6 +13,14 @@ function Confirmation() {
     const { restuarent,price,tax,name,address,email} = state || {};
 
 
+
+    useEffect(() => {
+        if (restuarent === undefined) {
+            navigate("/");
+
+        }})
+
+
     return (
         <div>
              <Link to="/">
