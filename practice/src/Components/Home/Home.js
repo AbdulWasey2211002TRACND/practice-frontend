@@ -60,7 +60,7 @@ function Home() {
                             <p className="card-text">Price: ${i.price}</p>
                             <label >Quantity: </label>
                             <input class="input" type="number" min={0} name="origin" id="quantity" defaultValue={1} onChange={(e) => setQuantity(e.target.value)} required ></input>
-                            <Link to="/Cart" state={{ product: i.id,quantity:quantity }}>
+                            <Link to="/Cart" state={{ id: i.id,quantity:quantity }}>
                                 <button className="btn btn-success" type="button">
                                     Add To Cart
                                 </button>

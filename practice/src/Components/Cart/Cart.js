@@ -17,7 +17,7 @@ function Cart() {
     const { state } = useLocation();
     const { id, quantity } = state || {};
     const [product, setProduct] = useState("");
-    const [cart, addCart] = useState([]);
+    const [cart, setCart] = useState([]);
 
 
     useEffect(() => {
@@ -31,19 +31,21 @@ function Cart() {
             axios.get(url).then
                 (response => {
                     setProduct(response.data)
+                    setCart(response.data)
+                    console.log(response.data)
+                  
+
 
 
                 })
+             
+
+
         }
 
 
     }, []);
     const totalprice = product.price * quantity;
-
-    function emptycart(){
-        setProduct("")
-
-    }
 
 
 
@@ -52,8 +54,7 @@ function Cart() {
         <div>
             <h1>Your Cart</h1>
 
-            {/* {product.map((i) => */}
-            
+            {/* {product.map((product) => */}
 
 
             <li key={product.id}>
@@ -65,15 +66,15 @@ function Cart() {
                         <p className="card-text">Total Price: ${totalprice}</p>
                         <p className="card-text">Quantity: {quantity}</p>
                         
-                            <CloseButton style={{color:"red"}} color='red' onClick={emptycart} variant="red" />
+                            <CloseButton color='red' variant="red" />
                       
                     </div>
                 </div>
             </li>
 
-            {/* )
+             {/* )
 
-            } */}
+            }   */}
 
 
         </div>
