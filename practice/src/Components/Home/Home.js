@@ -15,11 +15,15 @@ function Home() {
 
     useEffect(() => {
         const url = `http://127.0.0.1:8080/products/get_products`;
+        try{
         axios.get(url).then
             (response => {
                 setAllProducts(response.data)
 
             })
+        } catch (error) {
+            console.log(error);
+        }
 
 
     }, []);
