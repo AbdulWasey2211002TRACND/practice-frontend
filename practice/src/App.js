@@ -1,8 +1,9 @@
 import './App.css';
-import Search from './Components/Search/Search';
-import RestInfo from './Components/RestuarentInfo/RestInfo';
+import Home from './Components/Home/Home';
 import Booking from './Components/Booking/Booking';
 import Confirmation from './Components/Confirmation/Confirmation';
+import Product from './Components/ProductInfo/Product';
+import Cart from './Components/Cart/Cart';
 
 
 import {
@@ -16,13 +17,15 @@ function App() {
   return (
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Search   />}>
+      <Route path="/" element={<Home   />}>
       </Route>
-      <Route path="/Restuarent" element={<RestInfo   />}>
+      <Route path="/Product" element={<Product   />}>
       </Route>
       <Route path="/Booking" element={<Booking   />}>
       </Route>
       <Route path="/Confirmation" element={<Confirmation   />}>
+      </Route>
+      <Route path="/Cart" element={<Cart   />}>
       </Route>
     </Routes>
   </BrowserRouter>
