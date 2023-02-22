@@ -32,10 +32,6 @@ function Cart() {
                 (response => {
                     setProduct(response.data)
                     setCart(response.data)
-                    console.log(response.data)
-                  
-
-
 
                 })
              
@@ -45,7 +41,6 @@ function Cart() {
 
 
     }, []);
-    const totalprice = product.price * quantity;
 
 
 
@@ -54,7 +49,7 @@ function Cart() {
         <div>
             <h1>Your Cart</h1>
 
-            {/* {product.map((product) => */}
+            {cart.map((product) =>
 
 
             <li key={product.id}>
@@ -72,9 +67,9 @@ function Cart() {
                 </div>
             </li>
 
-             {/* )
+            )
 
-            }   */}
+            }
 
 
         </div>
