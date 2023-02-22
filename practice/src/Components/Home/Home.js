@@ -35,9 +35,9 @@ function Home() {
 
 
         <div>
-          
-          <div className='cart'> Your Cart <FontAwesomeIcon size='50' icon={faShoppingCart} /> 0 </div>
-         
+          <Link  to="/Cart">
+          <div className='cart'>Cart <FontAwesomeIcon size='50' icon={faShoppingCart} /></div>
+         </Link>
 
             <img className='image' src="https://raw.githubusercontent.com/jeff-lent/Alisnobba/main/Capstone/Logo.png" ></img>
 
