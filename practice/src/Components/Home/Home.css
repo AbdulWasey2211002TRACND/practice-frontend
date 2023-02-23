@@ -88,3 +88,7 @@ h3{
     margin-left: 1700px;
     font-size: large;
 }
+
+li{
+    list-style: none;
+}

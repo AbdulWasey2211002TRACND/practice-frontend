@@ -1,0 +1,23 @@
+.cross{
+    background-color: rgb(253, 253, 253);
+    color: red;
+    border-radius: 10px;
+}
+
+.btn-info{
+    margin-top: 19px;
+    height: 62px;
+    width: 130px;
+    margin-left: 1300px;
+
+}
+
+.btn-primary{
+    margin-top: 22px;
+    height: 62px;
+    width: 130px;
+    margin-left:20px;
+
+
+}
+

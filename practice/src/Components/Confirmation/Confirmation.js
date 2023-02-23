@@ -10,40 +10,33 @@ function Confirmation() {
 
     const navigate = useNavigate();
     const { state } = useLocation();
-    const { restuarent,price,tax,name,address,email} = state || {};
+    const { cart} = state || {};
 
 
 
     useEffect(() => {
-        if (restuarent === undefined) {
+        if (cart === undefined) {
             navigate("/");
 
         }})
 
 
     return (
+        
         <div>
-             <Link to="/">
-                <button className="btn btn-danger" type="button">
+            
+                        <img className='image' src="https://raw.githubusercontent.com/jeff-lent/Alisnobba/main/Capstone/Logo.png" ></img>
+
+           
+            <h1>Hurrah! Thanks for your order!</h1>
+            <Link to="/">
+                <button style={{marginRight:"200"}} className="button" type="button">
                     Start Over
                 </button>
             </Link>
-            <h1>Congratulations, Your booking has been confirmed!</h1>
+            
 
-
-            <div  className="card" >
-
-                <div  className="card-body">
-                    <h5 style={{ color: "burlywood" }} className="card-title">Hotel Booked: {restuarent.name} </h5>
-                    <p className="card-text">Name: {name}</p>
-                    <p className="card-text">Email: {email}</p>
-                    <p className="card-text">Address: {address}</p>
-                    <p className="card-text">Total Price: ${price}</p>
-                    <p className="card-text">Tax: ${tax}</p>
-                 
-                </div>
             </div>
-        </div>
     )
 
 }

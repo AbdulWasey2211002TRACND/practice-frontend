@@ -11,6 +11,8 @@ function Home() {
 
     const [allProducts, setAllProducts] = useState([]);
     const [quantity, setQuantity] = useState(1);
+ 
+    
 
 
     useEffect(() => {

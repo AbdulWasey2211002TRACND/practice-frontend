@@ -1,6 +1,5 @@
 import './App.css';
 import Home from './Components/Home/Home';
-import Booking from './Components/Booking/Booking';
 import Confirmation from './Components/Confirmation/Confirmation';
 import Product from './Components/ProductInfo/Product';
 import Cart from './Components/Cart/Cart';
@@ -20,8 +19,6 @@ function App() {
       <Route path="/" element={<Home   />}>
       </Route>
       <Route path="/Product" element={<Product   />}>
-      </Route>
-      <Route path="/Booking" element={<Booking   />}>
       </Route>
       <Route path="/Confirmation" element={<Confirmation   />}>
       </Route>
