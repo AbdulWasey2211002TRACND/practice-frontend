@@ -31,21 +31,28 @@ function Cart() {
         const url = `http://127.0.0.1:8081/orders/get_orders`;
 
         if (id === undefined) {
+            try{
 
             axios.get(url).then
                 (response => {
                     setCart(response.data);
                 })
+            }catch (error) {
+                console.log(error);}
         }
         else {
             if (quantity === '0') {
+                try{
                 axios.get(url).then
                     (response => {
                         setCart(response.data);
                     })
+                }  catch (error) {
+                    console.log(error);}
+            
             }
             else {
-
+                try{
                 axios.post(post_url, body).then
                     (response => {
                         axios.get(url).then
@@ -54,6 +61,9 @@ function Cart() {
                             })
 
                     })
+                }
+                catch (error) {
+                    console.log(error);}
             }
 
 

@@ -1,11 +1,10 @@
-import { render, screen, fireEvent, waitFor ,within} from '@testing-library/react';
+import { render, screen, fireEvent, waitFor ,within,getByLabelText} from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import '@testing-library/jest-dom/extend-expect';
 import App from './App';
 import axios from 'axios';
 import Product from './Components/ProductInfo/Product';
-
-
+import Cart  from './Components/Cart/Cart';
 jest.mock('axios');
 
 
@@ -106,6 +105,7 @@ test('should add a product to the cart when the "Add to Cart" button is clicked'
   axios.get.mockResolvedValueOnce({ data: mockProducts });
   render(<App />);
 
+
   const addToCartButton = await screen.findByRole('button', { name: 'Add To Cart' });
   fireEvent.click(addToCartButton);
 
@@ -114,33 +114,141 @@ test('should add a product to the cart when the "Add to Cart" button is clicked'
   });
 });
 
-test('should increase the quantity of a product in the cart when the "Add to Cart" button is clicked multiple times', async () => {
-  const mockProducts = [
+test('renders without crashing', () => {
+  render(
+    <MemoryRouter>
+      <Cart />
+    </MemoryRouter>
+  );
+});
+
+test('renders the "Return to shopping" button', () => {
+  render(<MemoryRouter>
+      <Cart />
+    </MemoryRouter> )
+  const button = screen.getByText('Return to shopping');
+  expect(button).toBeInTheDocument();
+});
+
+
+test('renders the cart items when the cart array is not empty', () => {
+  const cart = { id: 2, name: 'Pants', price: 30, totalprice: 60, quantity: 2, image_link: 'pants.png' };
+  render(<MemoryRouter>
+    <Cart />
+  </MemoryRouter>, { initialProps: { cart } });
+  screen.debug();
+
+  expect(screen.getByText('Pants')).toBeInTheDocument();
+});
+
+test('shows the message "Oops! Your Cart is empty" when the cart array is empty', () => {
+  render(<MemoryRouter>
+    <Cart />
+  </MemoryRouter>)
+    const message = screen.getByText('Oops! Your Cart is empty');
+  expect(message).toBeInTheDocument();
+});
+
+test('renders the "Checkout" button when the cart array is not empty', () => {
+  const cart = [    { id: 1, name: 'Shirt', price: 20, totalprice: 40, quantity: 2, image_link: 'shirt.png' },  ];
+  render(<MemoryRouter>
+    <Cart />
+  </MemoryRouter>, { initialProps: { cart } });
+  const button = screen.getByText('Checkout');
+  expect(button).toBeInTheDocument();
+});
+
+
+test('calculates the total price correctly', () => {
+  const cart = [
+    { id: 1, name: 'Shirt', price: 20, totalprice: 40, quantity: 2, image_link: 'shirt.png' },
+    { id: 2, name: 'Pants', price: 30, totalprice: 60, quantity: 2, image_link: 'pants.png' },
+  ];
+  render(<MemoryRouter>
+    <Cart />
+  </MemoryRouter>, { initialProps: { cart } });
+  const totalPrice = cart.reduce((total, item) => total + item.totalprice, 0);
+  const totalPriceElement = screen.getByText(`Total Price: $${totalPrice}`);
+  expect(totalPriceElement).toBeInTheDocument();
+});
+
+
+const cart = [
+  {
+    id: 1,
+    name: 'Product 1',
+    price: 10.99,
+    totalprice: 10.99,
+    quantity: 1,
+    image_link: 'https://example.com/product1.jpg',
+  },
+  {
+    id: 2,
+    name: 'Product 2',
+    price: 20.99,
+    totalprice: 20.99,
+    quantity: 1,
+    image_link: 'https://example.com/product2.jpg',
+  },
+];
+
+test('should render a cart with correct elements', async () => {
+  render(
+    <MemoryRouter>
+      <Cart cart={cart} />
+    </MemoryRouter>
+  );
+
+  // Check that each product has the expected elements
+  cart.forEach((product) => {
+    expect(screen.getByText(product.name)).toBeInTheDocument();
+    expect(screen.getByText(`Price: $${product.price}`)).toBeInTheDocument();
+    expect(screen.getByText(`Total: $${product.totalprice}`)).toBeInTheDocument();
+    expect(screen.getByAltText(product.name)).toBeInTheDocument();
+    expect(screen.getByDisplayValue(product.quantity)).toBeInTheDocument();
+  });
+
+  const totalPrice = cart.reduce((total, product) => total + product.totalprice, 0);
+  expect(screen.getByText(`Total price: $${totalPrice}`)).toBeInTheDocument();
+});
+
+test('should increase the quantity of a product when the "+" button is clicked', async () => {
+  const updateCart = jest.fn();
+  render(
+    <MemoryRouter>
+      <Cart cart={cart} updateCart={updateCart} />
+    </MemoryRouter>
+  );
+
+  const addButton = screen.getAllByRole('button', { name: '+' })[0];
+  fireEvent.click(addButton);
+
+  expect(updateCart).toHaveBeenCalledTimes(1);
+  expect(updateCart).toHaveBeenCalledWith([
     {
       id: 1,
       name: 'Product 1',
-      short_description: 'This is a short description for Product 1',
-      price: 9.99,
+      price: 10.99,
+      totalprice: 21.98,
+      quantity: 2,
       image_link: 'https://example.com/product1.jpg',
     },
-  ];
-
-  axios.get.mockResolvedValueOnce({ data: mockProducts });
-  render(<App />);
-
-  const addToCartButton = await screen.findByRole('button', { name: 'Add To Cart' });
-  fireEvent.click(addToCartButton);
-  fireEvent.click(addToCartButton);
-
-  await waitFor(() => {
-    expect(screen.getByText('Product 1')).toBeInTheDocument();
-  });
+    {
+      id: 2,
+      name: 'Product 2',
+      price: 20.99,
+      totalprice: 20.99,
+      quantity: 1,
+      image_link: 'https://example.com/product2.jpg',
+    },
+  ]);
 });
 
-
-
-
-
-
-
+test('should decrease the quantity of a product when the "-" button is clicked', async () => {
+  const updateCart = jest.fn();
+  render(
+    <MemoryRouter>
+      <Cart cart={cart} updateCart={updateCart} />
+    </MemoryRouter>
+  )});
 
