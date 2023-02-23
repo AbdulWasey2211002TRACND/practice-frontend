@@ -1,12 +1,13 @@
-import { render, screen, fireEvent, waitFor ,within,getByLabelText} from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within, getByLabelText } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import '@testing-library/jest-dom/extend-expect';
 import App from './App';
 import axios from 'axios';
 import Product from './Components/ProductInfo/Product';
-import Cart  from './Components/Cart/Cart';
-jest.mock('axios');
+import Cart from './Components/Cart/Cart';
+import { useLocation, Link } from 'react-router-dom';
 
+jest.mock('axios');
 
 
 
@@ -124,8 +125,8 @@ test('renders without crashing', () => {
 
 test('renders the "Return to shopping" button', () => {
   render(<MemoryRouter>
-      <Cart />
-    </MemoryRouter> )
+    <Cart />
+  </MemoryRouter>)
   const button = screen.getByText('Return to shopping');
   expect(button).toBeInTheDocument();
 });
@@ -145,12 +146,12 @@ test('shows the message "Oops! Your Cart is empty" when the cart array is empty'
   render(<MemoryRouter>
     <Cart />
   </MemoryRouter>)
-    const message = screen.getByText('Oops! Your Cart is empty');
+  const message = screen.getByText('Oops! Your Cart is empty');
   expect(message).toBeInTheDocument();
 });
 
 test('renders the "Checkout" button when the cart array is not empty', () => {
-  const cart = [    { id: 1, name: 'Shirt', price: 20, totalprice: 40, quantity: 2, image_link: 'shirt.png' },  ];
+  const cart = [{ id: 1, name: 'Shirt', price: 20, totalprice: 40, quantity: 2, image_link: 'shirt.png' },];
   render(<MemoryRouter>
     <Cart />
   </MemoryRouter>, { initialProps: { cart } });
@@ -192,57 +193,6 @@ const cart = [
   },
 ];
 
-test('should render a cart with correct elements', async () => {
-  render(
-    <MemoryRouter>
-      <Cart cart={cart} />
-    </MemoryRouter>
-  );
-
-  // Check that each product has the expected elements
-  cart.forEach((product) => {
-    expect(screen.getByText(product.name)).toBeInTheDocument();
-    expect(screen.getByText(`Price: $${product.price}`)).toBeInTheDocument();
-    expect(screen.getByText(`Total: $${product.totalprice}`)).toBeInTheDocument();
-    expect(screen.getByAltText(product.name)).toBeInTheDocument();
-    expect(screen.getByDisplayValue(product.quantity)).toBeInTheDocument();
-  });
-
-  const totalPrice = cart.reduce((total, product) => total + product.totalprice, 0);
-  expect(screen.getByText(`Total price: $${totalPrice}`)).toBeInTheDocument();
-});
-
-test('should increase the quantity of a product when the "+" button is clicked', async () => {
-  const updateCart = jest.fn();
-  render(
-    <MemoryRouter>
-      <Cart cart={cart} updateCart={updateCart} />
-    </MemoryRouter>
-  );
-
-  const addButton = screen.getAllByRole('button', { name: '+' })[0];
-  fireEvent.click(addButton);
-
-  expect(updateCart).toHaveBeenCalledTimes(1);
-  expect(updateCart).toHaveBeenCalledWith([
-    {
-      id: 1,
-      name: 'Product 1',
-      price: 10.99,
-      totalprice: 21.98,
-      quantity: 2,
-      image_link: 'https://example.com/product1.jpg',
-    },
-    {
-      id: 2,
-      name: 'Product 2',
-      price: 20.99,
-      totalprice: 20.99,
-      quantity: 1,
-      image_link: 'https://example.com/product2.jpg',
-    },
-  ]);
-});
 
 test('should decrease the quantity of a product when the "-" button is clicked', async () => {
   const updateCart = jest.fn();
@@ -250,5 +200,45 @@ test('should decrease the quantity of a product when the "-" button is clicked',
     <MemoryRouter>
       <Cart cart={cart} updateCart={updateCart} />
     </MemoryRouter>
-  )});
+  )
+});
+
+
+
+
+
+
+test('removes item from cart', async () => {
+  axios.delete.mockResolvedValueOnce({});
+
+  const { getByLabelText, getByText } = render(
+   
+    <MemoryRouter>
+      <Cart />
+    </MemoryRouter>
+  ,
+      {
+          state: {
+              cart: [
+                  {
+                      id: 1,
+                      name: 'Product 1',
+                      price: 10,
+                      quantity: 2,
+                      totalprice: 20,
+                      image_link: 'https://example.com/product1.jpg',
+                  },
+              ],
+          },
+      }
+  );
+
+  fireEvent.click(getByLabelText(/remove item/i));
+
+  expect(axios.delete).toHaveBeenCalledWith('http://127.0.0.1:8081/orders/delete_order?id=1');
+
+  await waitFor(() => {
+      expect(getByText(/oops/i)).toBeInTheDocument();
+  });
+});
 

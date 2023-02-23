@@ -50,7 +50,7 @@ function Product() {
                             <p className="card-text"> <a>Long Description:</a> {product.long_description}</p>
                             <p className="card-text"> <a>Price: $</a>{product.price}</p>
                             <label style={{ fontWeight: "bold" }} >Quantity: </label>
-                            <input class="input" type="number" min={0} name="origin" id="quantity" defaultValue={1} onChange={(e) => setQuantity(e.target.value)} required ></input>
+                            <input class="input" type="number" min={0} name="origin" data-testid="quantity" placeholder= "quantity"defaultValue={1} onChange={(e) => setQuantity(e.target.value)} required ></input>
                             <Link to="/Cart" state={{ id: product.id,quantity:quantity,name:product.name,price:product.price,image:product.image_link }}>
                                 <button className="btn btn-success" type="button">
                                     Add To Cart
