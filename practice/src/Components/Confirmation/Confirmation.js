@@ -10,7 +10,7 @@ function Confirmation() {
 
     const navigate = useNavigate();
     const { state } = useLocation();
-    const { cart} = state || {};
+    const { cart } = state || {};
 
 
 
@@ -18,25 +18,26 @@ function Confirmation() {
         if (cart === undefined) {
             navigate("/");
 
-        }})
+        }
+    })
 
 
     return (
-        
-        <div>
-            
-                        <img className='image' src="https://raw.githubusercontent.com/jeff-lent/Alisnobba/main/Capstone/Logo.png" ></img>
 
-           
+        <div>
+
+            <img className='image' src="https://raw.githubusercontent.com/jeff-lent/Alisnobba/main/Capstone/Logo.png" ></img>
+
+
             <h1>Hurrah! Thanks for your order!</h1>
             <Link to="/">
-                <button style={{marginRight:"200"}} className="button" type="button">
+                <button style={{ marginRight: "200" }} className="button" type="button">
                     Start Over
                 </button>
             </Link>
-            
 
-            </div>
+
+        </div>
     )
 
 }
