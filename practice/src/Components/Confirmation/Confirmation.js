@@ -14,13 +14,7 @@ function Confirmation() {
 
 
 
-    useEffect(() => {
-        if (cart === undefined) {
-            navigate("/");
-
-        }
-    })
-
+   
 
     return (
 

@@ -6,9 +6,13 @@ import axios from 'axios';
 import Product from './Components/ProductInfo/Product';
 import Cart from './Components/Cart/Cart';
 import { useLocation, Link } from 'react-router-dom';
+import Confirmation from './Components/Confirmation/Confirmation';
 
-jest.mock('axios');
-
+jest.mock('axios', () => ({
+  get: jest.fn(() => Promise.resolve({ data: [] })),
+  post: jest.fn(() => Promise.resolve({ data: [] })),
+  delete: jest.fn(() => Promise.resolve({ data: [] })),
+}));
 
 
 test('should render a list of products with correct elements', async () => {
@@ -207,38 +211,178 @@ test('should decrease the quantity of a product when the "-" button is clicked',
 
 
 
-
-test('removes item from cart', async () => {
-  axios.delete.mockResolvedValueOnce({});
-
-  const { getByLabelText, getByText } = render(
-   
-    <MemoryRouter>
-      <Cart />
-    </MemoryRouter>
-  ,
-      {
-          state: {
-              cart: [
-                  {
-                      id: 1,
-                      name: 'Product 1',
-                      price: 10,
-                      quantity: 2,
-                      totalprice: 20,
-                      image_link: 'https://example.com/product1.jpg',
-                  },
-              ],
-          },
-      }
-  );
-
-  fireEvent.click(getByLabelText(/remove item/i));
-
-  expect(axios.delete).toHaveBeenCalledWith('http://127.0.0.1:8081/orders/delete_order?id=1');
-
-  await waitFor(() => {
-      expect(getByText(/oops/i)).toBeInTheDocument();
-  });
+test('displays Start over button', () => {
+  render(<MemoryRouter>
+    <Confirmation />
+  </MemoryRouter>);
+  const imageElement = screen.getByText('Start Over');
+  expect(imageElement).toBeInTheDocument('Start Over');
 });
 
+
+test('renders without throwing an error', () => {
+  render(
+    <MemoryRouter>
+      <Product />
+    </MemoryRouter>
+  );
+});
+
+const product = {
+  id: 1,
+  name: 'Product 1',
+  short_description: 'Short description',
+  long_description: 'Long description',
+  price: 10,
+  image_link: 'https://example.com/image.jpg',
+};
+
+test('displays the correct product details', async () => {
+  const response = { data: product };
+  jest.spyOn(global, 'fetch').mockResolvedValueOnce({
+    ok: true,
+    json: () => Promise.resolve(response),
+  });
+
+  render(
+    <MemoryRouter initialEntries={[{ state: { id: product.id } }]}>
+      <Product />
+    </MemoryRouter>
+  );
+
+  expect(await screen.findByText(product.name)).toBeInTheDocument();
+  expect(screen.getByText(product.short_description)).toBeInTheDocument();
+  expect(screen.getByText(product.long_description)).toBeInTheDocument();
+  expect(screen.getByText(`Price: $${product.price}`)).toBeInTheDocument();
+  expect(screen.getByTestId('quantity')).toHaveValue(1);
+});
+
+test('updates the quantity state when the quantity input changes', () => {
+  render(
+    <MemoryRouter initialEntries={[{ state: { id: product.id } }]}>
+      <Product />
+    </MemoryRouter>
+  );
+
+  const quantityInput = screen.getByTestId('quantity');
+  fireEvent.change(quantityInput, { target: { value: 2 } });
+  expect(quantityInput).toHaveValue(2);
+});
+
+
+test('displays the correct product details', async () => {
+  axios.get.mockResolvedValueOnce({ data: product });
+
+  render(
+    <MemoryRouter initialEntries={[{ state: { id: product.id } }]}>
+      <Product />
+    </MemoryRouter>
+  );
+
+  expect(await screen.findByText(product.name)).toBeInTheDocument();
+  expect(await screen.findByText(product.short_description)).toBeInTheDocument();
+  expect(await screen.findByText(product.long_description)).toBeInTheDocument();
+  expect(await screen.findByText(`Price: $${product.price}`)).toBeInTheDocument();
+  expect(await screen.findByRole('img', { src: product.image_link })).toBeInTheDocument();
+});
+
+
+test('updates the quantity state when the user enters a value', async () => {
+  axios.get.mockResolvedValueOnce({ data: product });
+
+  render(
+    <MemoryRouter initialEntries={[{ state: { id: product.id } }]}>
+      <Product />
+    </MemoryRouter>
+  );
+
+  const quantityInput = await screen.findByTestId('quantity');
+  fireEvent.change(quantityInput, { target: { value: '5' } });
+
+  expect(quantityInput).toHaveValue('5');
+});
+
+
+test('passes correct data to Cart page when Add To Cart button is clicked', () => {
+  const productId = 1;
+  const mockProduct = {
+    id: productId,
+    name: 'Product Name',
+    short_description: 'Short Description',
+    long_description: 'Long Description',
+    price: 10.99,
+    image_link: 'http://example.com/image.jpg'
+  };
+  axios.get.mockResolvedValueOnce({ data: mockProduct });
+  const { getByText, getByPlaceholderText } = render(
+    <MemoryRouter initialEntries={[{ state: { id: productId } }]}>
+      <Product />
+    </MemoryRouter>
+  );
+  const quantityInput = getByPlaceholderText('quantity');
+  fireEvent.change(quantityInput, { target: { value: '2' } });
+  const addToCartButton = getByText('Add To Cart');
+  fireEvent.click(addToCartButton);
+  expect(mockNavigate).toHaveBeenCalledWith('/Cart', {
+    state: {
+      id: mockProduct.id,
+      quantity: 2,
+      name: mockProduct.name,
+      price: mockProduct.price,
+      image: mockProduct.image_link
+    }
+  })});
+
+
+  test('displays products in the cart', () => {
+    const cartData = [    { id: 1, name: 'Product 1', price: 10, quantity: 2, totalprice: 20, image_link: 'http://example.com/image1.jpg' },    { id: 2, name: 'Product 2', price: 15, quantity: 1, totalprice: 15, image_link: 'http://example.com/image2.jpg' },  ];
+    const { getByText } = render(<MemoryRouter>
+      <Cart />
+    </MemoryRouter>, { 
+      initialProps: { 
+        location: { 
+          state: { 
+            cart: cartData
+          } 
+        } 
+      } 
+    });
+    expect(getByText('Product 1')).toBeInTheDocument();
+    expect(getByText('$10')).toBeInTheDocument();
+    expect(getByText('2')).toBeInTheDocument();
+    expect(getByText('$20')).toBeInTheDocument();
+    expect(getByText('Product 2')).toBeInTheDocument();
+    expect(getByText('$15')).toBeInTheDocument();
+    expect(getByText('1')).toBeInTheDocument();
+    expect(getByText('$15')).toBeInTheDocument();
+  });
+
+
+  test('removes product from the cart', async () => {
+    const cartData = [
+      { id: 1, name: 'Product 1', price: 10, quantity: 2, totalprice: 20, image_link: 'http://example.com/image1.jpg' },
+      { id: 2, name: 'Product 2', price: 15, quantity: 1, totalprice: 15, image_link: 'http://example.com/image2.jpg' },
+    ];
+    const { getByText, queryByText } = render(<MemoryRouter>
+      <Cart />
+    </MemoryRouter>, { 
+      initialProps: { 
+        location: { 
+          state: { 
+            cart: cartData
+          } 
+        } 
+      } 
+    });
+    const removeButton = getByText('Remove Item');
+    fireEvent.click(removeButton);
+    await waitFor(() => {
+      expect(queryByText('Product 1')).not.toBeInTheDocument();
+      expect(queryByText('$10')).not.toBeInTheDocument();
+      expect(queryByText('2')).not.toBeInTheDocument();
+      expect(queryByText('$20')).not.toBeInTheDocument();
+    });
+  });
+
+
+  

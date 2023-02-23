@@ -22,11 +22,16 @@ function Product() {
 
         else {
             const url = `http://127.0.0.1:8080/products/get_product_by_id?id=${id}`;
+            try{
             axios.get(url).then
                 (response => {
                     setProduct(response.data)
 
                 })
+
+                }catch (error) {
+                    console.log(error);
+                }
         }
 
 
