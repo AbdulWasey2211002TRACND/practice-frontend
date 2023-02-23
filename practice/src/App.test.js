@@ -385,4 +385,32 @@ test('passes correct data to Cart page when Add To Cart button is clicked', () =
   });
 
 
-  
+
+ 
+test('renders cart with products', () => {
+  const cart = [
+    { id: 1, name: 'Product 1', price: 10, quantity: 2, totalprice: 20, image_link: 'https://example.com/image1.jpg' },
+    { id: 2, name: 'Product 2', price: 20, quantity: 1, totalprice: 20, image_link: 'https://example.com/image2.jpg' }
+  ];
+
+  render(
+    <MemoryRouter initialEntries={['/cart']} initialIndex={0}>
+      <Cart location={{ state: { cart } }} />
+    </MemoryRouter>
+  );
+
+  expect(screen.getByText('Your Cart')).toBeInTheDocument();
+  expect(screen.getByText('Product 1')).toBeInTheDocument();
+  expect(screen.getByText('Product 2')).toBeInTheDocument();
+});
+
+test('renders cart without products', () => {
+  render(
+    <MemoryRouter initialEntries={['/cart']} initialIndex={0}>
+      <Cart />
+    </MemoryRouter>
+  );
+
+  expect(screen.getByText('Oops! Your Cart is empty')).toBeInTheDocument();
+});
+
