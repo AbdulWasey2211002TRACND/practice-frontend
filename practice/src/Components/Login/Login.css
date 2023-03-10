@@ -1,0 +1,13 @@
+.card{
+    margin-left: 300px;
+    margin-top: 150px;
+}
+
+.rounded-start{
+height: 100%;
+}
+
+p{
+    text-align: center;
+    color:rgb(105, 9, 9);
+}

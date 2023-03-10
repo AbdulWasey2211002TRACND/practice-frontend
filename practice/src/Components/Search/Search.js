@@ -1,52 +1,64 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Search.css'
 import axios from 'axios';
 import 'react-dropdown/style.css';
 import { Link } from 'react-router-dom';
+import {
+    MDBBtn,
+    MDBContainer,
+    MDBCard,
+    MDBCardBody,
+    MDBCardImage,
+    MDBRow,
+    MDBCol,
+    MDBIcon,
+    MDBInput
+}
+    from 'mdb-react-ui-kit';
 
 
 function Search() {
 
-    const [origin, setOrigin] = useState("");
-    const [pool, setPool] = useState("");
-    const [experience, setExperience] = useState("");
-    const [allorigins, setAllOrigins] = useState([]);
-    const [message,setMessage] = useState("What are you waiting for? Search it!");
- 
-
-
-    useEffect(() => {
-        const storedRestuarents = localStorage.getItem("restuarents");
-        if (storedRestuarents) {
-            setAllOrigins(JSON.parse(storedRestuarents));
-        }
-      }, []);
-
-    function GetRestuarent(e) {
-        const body = {
-            location: origin,
-            experience: experience,
-            pool: pool
-        }
-
-        const url = "http://127.0.0.1:8080/hotels/get_hotel";
-        e.preventDefault();
-
-        axios.post(url, body).then
-            (response => {
-
-                setAllOrigins(response.data)
-                localStorage.setItem("restuarents",  JSON.stringify(response.data));
-                if (!response.data.length){
-                    setMessage("Oops! No Hotels found. Try again with another search.")
-                }
-
-            })
+    // const [origin, setOrigin] = useState("");
+    // const [pool, setPool] = useState("");
+    // const [experience, setExperience] = useState("");
+    // const [allorigins, setAllOrigins] = useState([]);
+    // const [message,setMessage] = useState("What are you waiting for? Search it!");
 
 
 
+    // useEffect(() => {
+    //     const storedRestuarents = localStorage.getItem("restuarents");
+    //     if (storedRestuarents) {
+    //         setAllOrigins(JSON.parse(storedRestuarents));
+    //     }
+    //   }, []);
 
-    }
+    // function GetRestuarent(e) {
+    //     const body = {
+    //         location: origin,
+    //         experience: experience,
+    //         pool: pool
+    //     }
+
+    //     const url = "http://127.0.0.1:8080/hotels/get_hotel";
+    //     e.preventDefault();
+
+    //     axios.post(url, body).then
+    //         (response => {
+
+    //             setAllOrigins(response.data)
+    //             localStorage.setItem("restuarents",  JSON.stringify(response.data));
+    //             if (!response.data.length){
+    //                 setMessage("Oops! No Hotels found. Try again with another search.")
+    //             }
+
+    //         })
+
+
+
+
+    // }
 
 
 
@@ -56,73 +68,133 @@ function Search() {
 
 
         <div>
-            <img className='image' src="https://raw.githubusercontent.com/jeff-lent/Alisnobba/main/Capstone/Logo.png" ></img>
+            <img className='image' src="https://www.xloopdigital.com/wp-content/uploads/2022/07/xloop-TM-logo.png" ></img>
 
 
-            <h1>Book Your Dream Hotel</h1>
+            <h1>Enter Your Information</h1>
+
+            <MDBContainer className="my-10">
+
+                <MDBCard>
+                    <div className='d-flex flex-row mt-2'>
+                        <MDBIcon fas icon="cubes fa-3x me-3" style={{ color: '#ff6219' }} />
+                        <span className="h1 fw-bold mb-0">Introduction</span>
+                    </div>
+                    <MDBRow className='g-0'>
+
+                        <MDBCol md='13'>
+                            <MDBCardBody className='d-flex flex-column'>
+
+                                <br></br>
+
+                                <label>Full Name</label>
+                                <MDBInput wrapperClass='mb-4' id='formControlLg' type='text' size="lg" required />
+                                <label>Introduction</label>
+
+                                <MDBInput wrapperClass='mb-4'  id='Introduction' type='text' size="lg" required />
+                                <label>Department</label>
+
+                                <MDBInput wrapperClass='mb-4'  id='Department' type='text' size="lg" required />
+                                <label>Skills</label>
+
+                                <MDBInput wrapperClass='mb-4'  id='Skills' type='text' size="lg" required />
 
 
-            <form action="" onSubmit={GetRestuarent}>
-
-                <div className="inputfield">
-                    <input className="input" type="text" name="origin" id="origin" placeholder='Origin' value={origin} onChange={(e) => setOrigin(e.target.value)} required ></input>
-                </div>
-
-
-                <select required className='dropdown' value={experience} onChange={(e) => setExperience(e.target.value)}>
-                    <option value="" disabled selected hidden>Select Experience</option>
-                    <option value="Luxury">Luxury</option>
-                    <option value="Budget">Budget</option>
-                    <option value="Business">Business</option>
-                </select>
-
-
-                <select required className='dropdown' value={pool} onChange={(e) => setPool(e.target.value)}>
-                    <option value="" disabled selected hidden>Need Pool?</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                </select>
-
-
-                <button className="button" type="submit"> Search</button>
 
 
 
 
 
 
-            </form>
+                            </MDBCardBody>
+                        </MDBCol>
 
-            {allorigins.length?
-                <ul>
+                    </MDBRow>
+                </MDBCard>
 
-                    {allorigins.map((i) =>
+            </MDBContainer>
 
 
-                        <li key={i.id}>
-                            <div className="card" >
-                                <img src={i.image_link} className="card-img-top" ></img>
-                                <div className="card-body">
-                                    <h5 style={{color:"burlywood"}} className="card-title">{i.name}</h5>
-                                    <p className="card-text">{i.short_description}</p>
-                                    <Link to="/Restuarent" state={{ id: i.id }}>
-                                        <button  className="btn btn-success" type="button"> 
-                                            View Details
-                                        </button>
-                                    </Link>
-                                </div>
-                            </div>
-                        </li>
+            <MDBContainer className="my-10">
 
-                    )
+                <MDBCard>
+                    <div className='d-flex flex-row mt-2'>
+                        <MDBIcon fas icon="cubes fa-3x me-3" style={{ color: '#ff6219' }} />
+                        <span className="h1 fw-bold mb-0">Education</span>
+                    </div>
+                    <MDBRow className='g-0'>
 
-                    }
+                        <MDBCol md='13'>
+                            <MDBCardBody className='d-flex flex-column'>
 
-                </ul>
+                                <br></br>
 
-                :
-                <h2> {message}</h2>
-            }
+                                <label>Degree Name</label>
+                                <MDBInput wrapperClass='mb-4' id='formControlLg' type='text' size="lg" required />
+                                
+                                <label>Degree Start Date</label>
+
+                                <MDBInput wrapperClass='mb-4'  id='formControlLg' type='date' size="lg" required />
+
+                                <label>Degree End Date</label>
+
+                                <MDBInput wrapperClass='mb-4'  id='formControlLg' type='date' size="lg" required />
+
+
+
+
+
+
+
+                            </MDBCardBody>
+                        </MDBCol>
+
+                    </MDBRow>
+                </MDBCard>
+
+            </MDBContainer>
+
+
+            <MDBContainer className="my-10">
+
+                <MDBCard>
+                    <div className='d-flex flex-row mt-2'>
+                        <MDBIcon fas icon="cubes fa-3x me-3" style={{ color: '#ff6219' }} />
+                        <span className="h1 fw-bold mb-0">Certification</span>
+                    </div>
+                    <MDBRow className='g-0'>
+
+                        <MDBCol md='13'>
+                            <MDBCardBody className='d-flex flex-column'>
+
+                                <br></br>
+
+                                <label>Title</label>
+                                <MDBInput wrapperClass='mb-4' id='formControlLg' type='text' size="lg" required />
+                                
+                                <label>Authority Name</label>
+
+                                <MDBInput wrapperClass='mb-4'  id='formControlLg' type='text' size="lg" required />
+
+                                <label>Year</label>
+
+                                <MDBInput wrapperClass='mb-4'  id='formControlLg' type='number' size="lg" required />
+
+
+
+
+
+
+
+                            </MDBCardBody>
+                        </MDBCol>
+
+                    </MDBRow>
+                </MDBCard>
+
+            </MDBContainer>
+
+
         </div>
 
 
